@@ -1,23 +1,21 @@
-const { MongoClient } = require("mongodb");
+const express = require('express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv').config();
+const app = express();
 
-// Replace the uri string with your connection string.
-const uri = "mongodb+srv://ousama:test123@cluster0.avzw4nx.mongodb.net/?retryWrites=true&w=majority";
+mongoose
+  .connect(process.env.URI)
+  .then(()=>{
+    console.log("your DB is connected");
+  })
+  .catch((error)=>{
+    console.log(error);
+  })
+  .finally(()=>{
+    // close the DB connection
+    mongoose.disconnect()
+  })
 
-const client = new MongoClient(uri);
-
-async function run() {
-  try {
-    const database = client.db('sample_mflix');
-    const movies = database.collection('movies');
-
-    // Query for a movie that has the title 'Back to the Future'
-    const query = { title: 'Back to the Future' };
-    const movie = await movies.findOne(query);
-
-    console.log(movie);
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
-}
-run().catch(console.dir);
+app.listen(process.env.PORT | 8800, ()=>{
+  console.log("you're listening to port: ", process.env.PORT);
+})
