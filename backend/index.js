@@ -1,24 +1,23 @@
-const express = require("express");
-const app = express();
-const mongoose = require("mongoose");
-const cors = require("cors");
+const { MongoClient } = require("mongodb");
 
+// Replace the uri string with your connection string.
+const uri = "mongodb+srv://ousama:test123@cluster0.avzw4nx.mongodb.net/?retryWrites=true&w=majority";
 
+const client = new MongoClient(uri);
 
-app.use(express.json());
-app.use(cors());
+async function run() {
+  try {
+    const database = client.db('sample_mflix');
+    const movies = database.collection('movies');
 
-app.get('/', (req, res)=>{
-    try {
-        res.status(200).json({"message": "you're on the UI"});
-    } catch (error) {
-        console.log(error);
-    }
-})
+    // Query for a movie that has the title 'Back to the Future'
+    const query = { title: 'Back to the Future' };
+    const movie = await movies.findOne(query);
 
-
-
-
-app.listen(3000, ()=>{
-    console.log("you're listening to port 3000, SUCCESSFULLY")
-})
+    console.log(movie);
+  } finally {
+    // Ensures that the client will close when you finish/error
+    await client.close();
+  }
+}
+run().catch(console.dir);
