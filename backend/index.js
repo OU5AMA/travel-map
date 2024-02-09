@@ -6,8 +6,7 @@ const pinRoute = require("./routes/pins");
 const userRoute = require("./routes/users");
 
 app.use(express.json());
-app.use("api/pins", pinRoute );
-app.use("api/users", userRoute);
+
 
 
 mongoose
@@ -22,6 +21,10 @@ mongoose
     // close the DB connection
     mongoose.disconnect()
   })
+
+app.use("api/pins", pinRoute );
+app.use("api/users", userRoute);
+
 
 app.listen(process.env.PORT | 8800, ()=>{
   console.log("you're listening to port: ", process.env.PORT);
