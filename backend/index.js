@@ -2,8 +2,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv').config();
 const app = express();
+const pinRoute = require("./routes/pins");
+const userRoute = require("./routes/users");
 
 app.use(express.json());
+app.use("api/pins", pinRoute );
+app.use("api/users", userRoute);
+
 
 mongoose
   .connect(process.env.URI)
